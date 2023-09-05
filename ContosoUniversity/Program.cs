@@ -20,6 +20,11 @@ namespace ContosoUniversity
             builder.Services.AddDbContext<SchoolContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
+            // Add the database exception filter if the environment is in development mode
+            if (builder.Environment.IsDevelopment())
+            {
+                builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+            }
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
