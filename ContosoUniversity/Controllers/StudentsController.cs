@@ -35,8 +35,20 @@ namespace ContosoUniversity.Controllers
                 return NotFound();
             }
 
+            // The Include and ThenInclude methods cause the context to load the
+            // Student.Enrollments navigation property, and within each enrollment
+            // the Enrollment.Course navigation property. 
+            
             var student = await _context.Students
+                // Include student enrollments
+                .Include(s => s.Enrollments)
+                    // Include student course
+                    .ThenInclude(e => e.Course)
+                //Improves performance in scenarios where the entities returned won't be updated in the current context's lifetime
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
+
+
             if (student == null)
             {
                 return NotFound();
