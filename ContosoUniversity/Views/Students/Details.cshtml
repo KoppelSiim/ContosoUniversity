@@ -32,6 +32,27 @@
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Enrollments)
         </dt>
+        <!-- Description details -->
+        <dd class="col-sm-10">
+            <table class="table">
+                <tr>
+                    <th>Course Title</th>
+                    <th>Grade</th>
+                </tr>
+                <!-- Loop through the entities in the Enrollments navigation property -->
+                @foreach (var item in Model.Enrollments)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Course.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Grade)
+                        </td>
+                    </tr>
+                }
+            </table>
+        </dd>
     </dl>
 </div>
 <div>
