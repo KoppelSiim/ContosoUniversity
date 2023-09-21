@@ -68,9 +68,8 @@ namespace ContosoUniversity.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //Removed ID from the Bind attribute because ID is the primary key value which SQL Server will
-        //set automatically when the row is inserted. Input from the user doesn't set the ID value.
-        public async Task<IActionResult> Create([Bind("LastName,FirstMidName,EnrollmentDate")] Student student)
+        public async Task<IActionResult> Create(
+        [Bind("EnrollmentDate,FirstMidName,LastName")] Student student)
         {
             try
             {
@@ -81,9 +80,10 @@ namespace ContosoUniversity.Controllers
                     return RedirectToAction(nameof(Index));
                 }
             }
-            catch (DbUpdateException /* ex */)
+            catch (DbUpdateException ex)
             {
-                //Log the error (uncomment ex variable name and write a log.
+
+                Console.WriteLine($"Exception: {ex}");
                 ModelState.AddModelError("", "Unable to save changes. " +
                     "Try again, and if the problem persists " +
                     "see your system administrator.");
