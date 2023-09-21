@@ -152,9 +152,21 @@ namespace ContosoUniversity.Controllers
             var student = await _context.Students
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
+
             if (student == null)
             {
                 return NotFound();
+            }
+            /*
+             This parameter is false when the HttpGet Delete method is called without a previous failure.
+             When it's called by the HttpPost Delete method in response to a database update error,
+             the parameter is true and an error message is passed to the view.
+             */
+            if (saveChangesError.GetValueOrDefault())
+            {
+                ViewData["ErrorMessage"] =
+                    "Delete failed. Try again, and if the problem persists " +
+                    "see your system administrator.";
             }
 
             return View(student);
