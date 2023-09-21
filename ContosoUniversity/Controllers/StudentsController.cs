@@ -188,6 +188,7 @@ namespace ContosoUniversity.Controllers
             try
             {
                 _context.Students.Remove(student);
+                // Generates SQL DELETE
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
