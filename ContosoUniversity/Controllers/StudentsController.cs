@@ -177,16 +177,18 @@ namespace ContosoUniversity.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Students == null)
+            /*if (_context.Students == null)
             {
-                return Problem("Entity set 'SchoolContext.Students'  is null.");
-            }
+                return Problem ("Entity set 'SchoolContext.Students'  is null.");
+            }*/
+
             var student = await _context.Students.FindAsync(id);
-            if (student != null)
+
+            if (student == null)
             {
-                _context.Students.Remove(student);
+                return RedirectToAction(nameof(Index));
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
