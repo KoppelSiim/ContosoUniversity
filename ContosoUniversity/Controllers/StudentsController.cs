@@ -177,11 +177,7 @@ namespace ContosoUniversity.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            /*if (_context.Students == null)
-            {
-                return Problem ("Entity set 'SchoolContext.Students'  is null.");
-            }*/
-
+           
             var student = await _context.Students.FindAsync(id);
 
             if (student == null)
@@ -189,8 +185,18 @@ namespace ContosoUniversity.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                _context.Students.Remove(student);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+
+            catch (DbUpdateException  ex )
+            {
+                Console.WriteLine(ex);
+                return RedirectToAction(nameof(Delete), new { id = id, saveChangesError = true });
+            }
         }
 
         private bool StudentExists(int id)
