@@ -23,5 +23,22 @@ namespace ContosoUniversity
 
         // Return true if the PageIndex is less than TotalPages, meaning there are more pages ahead.
         public bool HasNextPage => PageIndex < TotalPages;
+
+        /*
+         The CreateAsync method in this code takes page size and page number and applies the appropriate Skip and Take statements to the IQueryable.
+         When ToListAsync is called on the IQueryable, it will return a List containing only the requested page.
+         The properties HasPreviousPage and HasNextPage can be used to enable or disable Previous and Next paging buttons.
+         A CreateAsync method is used instead of a constructor to create the PaginatedList<T> object because constructors can't run asynchronous code.
+        */
+        public static async Task<PaginatedList<T>> CreateAsync(IQueryable<T> source, int pageIndex, int pageSize)
+        {
+            // Calculate the total count of items in the source asynchronously using CountAsync()
+            var count = await source.CountAsync();
+
+            // Skip() - skip a specified number of elements in a collection and return the remaining elements.
+            // Take() - take a specified number of elements from a collection and return them as a new collection.
+            var items = await source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            return new PaginatedList<T>(items, count, pageIndex, pageSize);
+        }
     }
 }
