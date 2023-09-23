@@ -33,6 +33,8 @@ namespace ContosoUniversity.Controllers
             // it sets it to "date_desc", otherwise, it sets it to "Date."
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
 
+            // If the search string is changed during paging, the page has to be reset to 1,
+            // because the new filter can result in different data to display. 
             if (searchString != null)
             {
                 pageNumber = 1;
@@ -73,7 +75,14 @@ namespace ContosoUniversity.Controllers
                     students = students.OrderBy(s => s.LastName);
                     break;
             }
-            return View(await students.AsNoTracking().ToListAsync());
+            int pageSize = 3;
+
+            // PaginatedList.CreateAsync method converts the student query to a single page of students in a collection type that supports paging.
+            // That single page of students is then passed to the view.
+            // The ?? operator defines a default value for a nullable type,
+            // the expression (pageNumber ?? 1) means return the value of pageNumber if it has a value, or return 1 if pageNumber is null.
+            return View(await PaginatedList<Student>.CreateAsync(students.AsNoTracking(), pageNumber ?? 1, pageSize));
+            
         }
 
         // GET: Students/Details/5
