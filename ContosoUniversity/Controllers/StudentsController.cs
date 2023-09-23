@@ -20,9 +20,11 @@ namespace ContosoUniversity.Controllers
         }
 
         // Implementing sorting and filtering functionality.
-        // Receave sortOrder and searchString parameter from the query string in the URL.
-        public async Task<IActionResult> Index(string sortOrder, string searchString)
+        // Receave sortOrder, currentFilter, searchString and pageNumber parameter from the query string in the URL.
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
+            ViewData["CurrentSort"] = sortOrder;
+
             // Sets a value in the ViewData dictionary, if sortOrder is null or empty,
             // it sets it to "name_desc", otherwise, it sets it to an empty string.
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
@@ -30,6 +32,16 @@ namespace ContosoUniversity.Controllers
             // Sets the sorting parameter for the "Date" column. If sortOrder is equal to "Date,"
             // it sets it to "date_desc", otherwise, it sets it to "Date."
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
             ViewData["CurrentFilter"] = searchString;
 
             // Select all students and store them in the students variable.
