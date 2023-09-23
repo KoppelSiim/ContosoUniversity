@@ -19,12 +19,42 @@ namespace ContosoUniversity.Controllers
             _context = context;
         }
 
-        // GET: Students
-        public async Task<IActionResult> Index()
+        // Implementing sorting functionality.
+        // Receave sortOrder parameter from the query string in the URL.
+        public async Task<IActionResult> Index(string sortOrder)
         {
-              return _context.Students != null ? 
-                          View(await _context.Students.ToListAsync()) :
-                          Problem("Entity set 'SchoolContext.Students'  is null.");
+            // Sets a value in the ViewData dictionary, if sortOrder is null or empty,
+            // it sets it to "name_desc", otherwise, it sets it to an empty string.
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+
+            // Sets the sorting parameter for the "Date" column. If sortOrder is equal to "Date,"
+            // it sets it to "date_desc", otherwise, it sets it to "Date."
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+
+            // Select all students and store them in the students variable.
+            var students = from s in _context.Students
+                           select s;
+
+
+            // The first time the Index page is requested, there's no query string.
+            // The students are displayed in ascending order by last name, which is the default
+            // as established by the fall-through case in the switch statement.
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    students = students.OrderByDescending(s => s.LastName);
+                    break;
+                case "Date":
+                    students = students.OrderBy(s => s.EnrollmentDate);
+                    break;
+                case "date_desc":
+                    students = students.OrderByDescending(s => s.EnrollmentDate);
+                    break;
+                default:
+                    students = students.OrderBy(s => s.LastName);
+                    break;
+            }
+            return View(await students.AsNoTracking().ToListAsync());
         }
 
         // GET: Students/Details/5
@@ -132,7 +162,6 @@ namespace ContosoUniversity.Controllers
                 catch (DbUpdateException ex )
                 {
                     Console.WriteLine(ex);
-                    //Log the error (uncomment ex variable name and write a log.)
                     ModelState.AddModelError("", "Unable to save changes. " +
                         "Try again, and if the problem persists, " +
                         "see your system administrator.");
