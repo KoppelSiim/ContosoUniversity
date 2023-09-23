@@ -17,5 +17,11 @@ namespace ContosoUniversity
 
             this.AddRange(items);
         }
+
+        // Return true if the PageIndex is greater than 1, meaning there are previous pages.
+        public bool HasPreviousPage => PageIndex > 1;
+
+        // Return true if the PageIndex is less than TotalPages, meaning there are more pages ahead.
+        public bool HasNextPage => PageIndex < TotalPages;
     }
 }
