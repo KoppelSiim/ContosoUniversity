@@ -4,7 +4,6 @@
     ViewData["Title"] = "Instructors";
 }
 
-
 <h2>Instructors</h2>
 
 <p>
@@ -24,9 +23,9 @@
 
     <tbody>
     @foreach (var item in Model.Instructors)
-        {
-            string selectedRow = "";
-            if (item.ID == (int?)ViewData["InstructorID"])
+    {
+        string selectedRow = "";
+        if (item.ID == (int?)ViewData["InstructorID"])
             {
                 selectedRow = "table-success";
             }
@@ -41,17 +40,17 @@
                 @Html.DisplayFor(modelItem => item.HireDate)
             </td>
             <td>
-                @if (item.OfficeAssignment != null)
-                    {
-                        @item.OfficeAssignment.Location
-                    }
-             </td>
-             <td>
-                @foreach (var course in item.CourseAssignments)
-                    {
-                        @course.Course.CourseID @course.Course.Title <br />
-                    }
-             </td>
+               @if (item.OfficeAssignment != null)
+                   {
+                     @item.OfficeAssignment.Location
+                   }
+            </td>
+            <td>
+               @foreach (var course in item.CourseAssignments)
+               {
+                  @course.Course.CourseID @course.Course.Title <br />
+               }
+            </td>
             <td>
                 <a asp-action="Index" asp-route-id="@item.ID">Select</a> |
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
@@ -59,6 +58,6 @@
                 <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
             </td>
         </tr>
-}
+    }
     </tbody>
 </table>
