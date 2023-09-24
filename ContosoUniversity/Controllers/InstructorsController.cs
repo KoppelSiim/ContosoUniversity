@@ -125,7 +125,6 @@ namespace ContosoUniversity.Controllers
             {
                 return NotFound();
             }
-
             var instructorToUpdate = await _context.Instructors
                 .Include(i => i.OfficeAssignment)
                 .FirstOrDefaultAsync(s => s.ID == id);
@@ -135,6 +134,7 @@ namespace ContosoUniversity.Controllers
                 "",
                 i => i.FirstMidName, i => i.LastName, i => i.HireDate, i => i.OfficeAssignment))
             {
+               
                 if (String.IsNullOrWhiteSpace(instructorToUpdate.OfficeAssignment?.Location))
                 {
                     instructorToUpdate.OfficeAssignment = null;
@@ -152,6 +152,7 @@ namespace ContosoUniversity.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            
             return View(instructorToUpdate);
         }
 

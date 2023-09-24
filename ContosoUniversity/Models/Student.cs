@@ -10,13 +10,13 @@ namespace ContosoUniversity.Models
         [StringLength(50)]
         [RegularExpression(@"^[A-Z]+[a-zA-Z]*$")]
         [Display(Name = "Last Name")]
-        public string? LastName { get; set; }
+        public string LastName { get; set; }
         [Required]
         [StringLength(50)]
         [RegularExpression(@"^[A-Z]+[a-zA-Z]*$")]
         [Column("FirstName")]
         [Display(Name = "First Name")]
-        public string? FirstMidName { get; set; }
+        public string FirstMidName { get; set; }
 
         // The DataType attribute is used to specify a data type that's more specific than the database intrinsic type.
         // In this case we only want to keep track of the date, not the date and time.
@@ -40,6 +40,6 @@ namespace ContosoUniversity.Models
         // "First Name", "Last Name", "Full Name", and "Enrollment Date" instead of the
         // property name in each instance (which has no space dividing the words).
 
-        public ICollection<Enrollment>? Enrollments { get; set; }
+        public ICollection<Enrollment> Enrollments { get; set; }
     }
 }
