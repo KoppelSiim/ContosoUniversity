@@ -5,7 +5,9 @@ namespace ContosoUniversity.Models
     public class Student
     {
         public int ID { get; set; }
+        [StringLength(50)]
         public string? LastName { get; set; }
+        [StringLength(50)]
         public string? FirstMidName { get; set; }
 
         // The DataType attribute is used to specify a data type that's more specific than the database intrinsic type.
