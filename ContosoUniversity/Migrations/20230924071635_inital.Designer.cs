@@ -13,7 +13,7 @@ namespace ContosoUniversity.Migrations
 {
     [DbContext(typeof(SchoolContext))]
     [Migration("20230924071635_inital")]
-    partial class inital
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
