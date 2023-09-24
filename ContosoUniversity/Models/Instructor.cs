@@ -28,11 +28,11 @@ namespace ContosoUniversity.Models
         {
             get { return LastName + ", " + FirstMidName; }
         }
-        // Todo Add The CourseAssignmentsnavigation properties later
-        // public ICollection<CourseAssignment> CourseAssignments { get; set; }
+        
+        public ICollection<CourseAssignment> CourseAssignments { get; set; }
 
-         // Instructor can have at most 1 Office and it can be null if office is not assigned.
-         public OfficeAssignment? OfficeAssignment { get; set; }
+        // Instructor can have at most 1 Office and it can be null if office is not assigned.
+        public OfficeAssignment? OfficeAssignment { get; set; }
 
     }
 }
