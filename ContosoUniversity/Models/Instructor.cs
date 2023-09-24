@@ -28,8 +28,7 @@ namespace ContosoUniversity.Models
         {
             get { return LastName + ", " + FirstMidName; }
         }
-        // Todo Add The CourseAssignments and OfficeAssignment navigation properties later
-
+        // Todo Add The CourseAssignmentsnavigation properties later
         // public ICollection<CourseAssignment> CourseAssignments { get; set; }
          public OfficeAssignment? OfficeAssignment { get; set; }
 
