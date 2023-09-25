@@ -136,9 +136,9 @@ namespace ContosoUniversity.Controllers
 
         // POST: Instructors/Edit/5
 
-        [HttpPost, ActionName("Edit")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditPost(int? id)
+        public async Task<IActionResult> Edit(int? id, string[] selectedCourses)
         {
             if (id == null)
             {
@@ -146,6 +146,8 @@ namespace ContosoUniversity.Controllers
             }
             var instructorToUpdate = await _context.Instructors
                 .Include(i => i.OfficeAssignment)
+                .Include(i => i.CourseAssignments)
+                    .ThenInclude(i => i.Course)
                 .FirstOrDefaultAsync(s => s.ID == id);
 
             if (await TryUpdateModelAsync<Instructor>(
@@ -158,6 +160,7 @@ namespace ContosoUniversity.Controllers
                 {
                     instructorToUpdate.OfficeAssignment = null;
                 }
+                UpdateInstructorCourses(selectedCourses, instructorToUpdate);
                 try
                 {
                     await _context.SaveChangesAsync();
@@ -171,7 +174,8 @@ namespace ContosoUniversity.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            
+            UpdateInstructorCourses(selectedCourses, instructorToUpdate);
+            PopulateAssignedCourseData(instructorToUpdate);
             return View(instructorToUpdate);
         }
         private void UpdateInstructorCourses(string[] selectedCourses, Instructor instructorToUpdate)
