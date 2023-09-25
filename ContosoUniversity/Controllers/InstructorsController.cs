@@ -233,16 +233,22 @@ namespace ContosoUniversity.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Instructors == null)
-            {
-                return Problem("Entity set 'SchoolContext.Instructors'  is null.");
-            }
-            var instructor = await _context.Instructors.FindAsync(id);
-            if (instructor != null)
-            {
-                _context.Instructors.Remove(instructor);
-            }
-            
+            // Eager loading for the CourseAssignments navigation property. Have to include this or EF won't know about
+            // related CourseAssignment entities and won't delete them. To avoid needing to read them here you could
+            // configure cascade delete in the database.
+            Instructor instructor = await _context.Instructors
+                .Include(i => i.CourseAssignments)
+                .SingleAsync(i => i.ID == id);
+
+            //If the instructor to be deleted is assigned as administrator of any departments,
+            //remove the instructor assignment from those departments.
+            var departments = await _context.Departments
+                .Where(d => d.InstructorID == id)
+                .ToListAsync();
+            departments.ForEach(d => d.InstructorID = null);
+
+            _context.Instructors.Remove(instructor);
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
