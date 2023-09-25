@@ -76,6 +76,9 @@ namespace ContosoUniversity.Controllers
         // GET: Instructors/Create
         public IActionResult Create()
         {
+            var instructor = new Instructor();
+            instructor.CourseAssignments = new List<CourseAssignment>();
+            PopulateAssignedCourseData(instructor);
             return View();
         }
 
